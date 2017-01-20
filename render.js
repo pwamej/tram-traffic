@@ -15,9 +15,11 @@ var vectorSource = new ol.source.Vector({
         url: 'http://localhost:80/relation_176851.gpx',
         format: new ol.format.GPX()
     });
+
 var tramMarker = new ol.Feature({
     type : 'geoMarker'
 });
+
 var routeCoords,routeLength;
 var listenerKey = vectorSource.once('change', function(e) {
   if (vectorSource.getState() == 'ready') {
