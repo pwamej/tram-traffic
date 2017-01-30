@@ -3,7 +3,7 @@
      <link rel="stylesheet" href="https://openlayers.org/en/v3.20.1/css/ol.css" type="text/css">
      <style>
       .map { /*Wymiary mapy*/
-         height: 500px;
+         height: 400px;
          width: 100%;
        }
      </style>
@@ -17,11 +17,11 @@
     <div id="map" class="map"></div>
     <label for="speed">
       speed:&nbsp;
-      <input id="speed" type="range" min="10" max="999" step="10" value="10">
+      <input id="speed" type="range" min="100" max="9900" step="1" value="1">
     </label>
     <button id="start-animation">Start Animation</button>
     <script type="text/javascript" src="dane/relations.js"></script>
-    <script type="text/javascript" src="dane/loadRelationCoords.js"></script>
+    <script type="text/javascript" src="loadRelationCoords.js"></script>
     <script type="text/javascript" src="styles.js"></script>
     <script type="text/javascript" src="render.js"></script>
     <script type="text/javascript" src="animation.js"></script>

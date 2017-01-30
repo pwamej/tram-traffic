@@ -1,4 +1,5 @@
 var relationSources=[];
+var stopSources=[];
 //relationIDs - tablica zawierająca ID relacji
 relationIDs.map(function(relationID){
     relationSources[relationID] = new ol.source.Vector({
@@ -7,21 +8,19 @@ relationIDs.map(function(relationID){
         format : new ol.format.GPX()
     });
 });
-// relationCoords - tablica asocjacyjna postaci {ID relacji : tablica współrzędnych}
-var relationCoords=[];
+// routes - tablica asocjacyjna postaci {ID relacji : geometria relacji}
+var relationGeometry=[];
 relationIDs.forEach(function(relationID){
     relationSources[relationID].once('addfeature', function(e){
-        //labelowanie danych aby umożliwić użycie getFeatuereById
+        console.log('xD');
+        //labelowanie danych aby umożliwić użycie getFeatureById
         relationSources[relationID].forEachFeature(function(f){
             f.setId(f.getProperties()['name']);
         });
         //w większości relacji 'Graph 1' zawiera współrzędne trasy
-        var route = relationSources[relationID].getFeatureById('Graph 1').getGeometry();
-        //uzyskanie tablicy współrzędnych
-        relationCoords[relationID] = route.getCoordinates()[0].map(a => a.slice(0,2));
-        //workaround dla pozostałych relacji
-        if(relationCoords[relationID].length<100){
-            var featureID;
+        var relationLineString = relationSources[relationID].getFeatureById('Graph 1').getGeometry().getLineString(0);
+        var featureID = 'Graph 1';
+        if(relationLineString.getCoordinates().length<100){
             switch(relationID){
                 case '172973':
                     featureID = 'Graph 7';
@@ -36,9 +35,19 @@ relationIDs.forEach(function(relationID){
                 default:
                     featureID = 'Graph 2';
             }
-            route = relationSources[relationID].getFeatureById(featureID).getGeometry();
-            relationCoords[relationID] = route.getCoordinates()[0].map(a => a.slice(0,2));
+            relationLineString = relationSources[relationID].getFeatureById(featureID).getGeometry().getLineString(0);
+
+
         }
-        if(relationID=='1175384') relationCoords['1175384'].reverse();
+        relationLineString.set('layout','XY');
+        relationGeometry[relationID]=relationLineString;
+
+        //przystanki
+        stopSources[relationID]=new ol.source.Vector({
+            features : relationSources[relationID].getFeatures(),
+        });
+        //console.log(stopSources[relationID].getFeatureById(featureID));
+        stopSources[relationID].removeFeature(stopSources[relationID].getFeatureById(featureID)); //usuniecie trasy z source dla przystanków
+        //relationLayers[relationID].setVisible(false);
     });
 });
