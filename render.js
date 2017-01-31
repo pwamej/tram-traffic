@@ -13,26 +13,12 @@ var map = new ol.Map({
     })
 });
 
-var relationLayers=[];
-relationIDs.map(function(relationID){
-    relationLayers[relationID] = new ol.layer.Vector({
-        source : relationSources[relationID],
-//        visible : false
-    });
-});
+var relations = relationIDs.map(function (relationID) {
+    return new Relation(relationID);
+})
+//var relations = [];
+//relations[0] = new Relation(relationIDs[0]);
 
-relationLayers.map(function (relationLayer) {
-    map.addLayer(relationLayer);
-});
-
-var stopLayers=[];
-relationIDs.map(function(relationID){
-    stopLayers[relationID] = new ol.layer.Vector({
-        source : stopSources[relationID],
-//        visible : false
-    });
-});
-
-stopLayers.map(function (stopLayer) {
-    map.addLayer(stopLayer);
+relations.map(function (relation) {
+    map.addLayer(relation.trackLayer)
 });
