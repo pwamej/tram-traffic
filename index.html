@@ -15,15 +15,22 @@
 <body>
     <h2>Symulacja krakowskiej sieci tramwajowej</h2>
     <div id="map" class="map"></div>
-    <label for="speed">
-        speed:&nbsp;
-        <input id="speed" type="range" min="100" max="9900" step="1" value="1">
-    </label>
-    <button id="start-animation">Start Animation</button>
-    <button id="load-trams">Load trams</button>
+    Szybkość animacji:
+    <input id="speed" type="range" min="1" max="100" step="1" value="10">
+    Pora dnia:
+    <input id="daytime" type="range" min="1" max="8" step="1" value="1">
+    Dzień:
+    <select id="day">
+        <option value="r">Powszedni</option>
+        <option value="s">Sobota</option>
+        <option value="n">Niedziela</option>
+    </select>
+    <br/>
+    <button id="start-animation">Start</button>
     <!--data-->
     <script type="text/javascript" src="data/relationIDs.js"></script>
     <script type="text/javascript" src="data/styles.js"></script>
+    <script type="text/javascript" src="data/load.js"></script>
     <!--classes-->
     <script type="text/javascript" src="class/Relation.js"></script>
     <script type="text/javascript" src="class/Tram.js"></script>

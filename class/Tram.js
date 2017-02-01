@@ -1,6 +1,10 @@
 var STOPPED_TIME = 1000,
-    SECONDS_PER_TRACK = 120,
+    VELOCITY = 5,
     STOP_THRESHOLD = 5;
+
+var speedInput = document.getElementById('speed');
+var daytimeInput = document.getElementById('daytime');
+var dayInput = document.getElementById('day');
 
 class Tram extends ol.Feature {
     constructor (relation, startTime){
@@ -26,29 +30,17 @@ class Tram extends ol.Feature {
         return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
     }
     
-    stop (stopFeature) {
-        console.log('stop'+stopFeature.getId());
-        this.animating = false;
-        this.stopLayer.getSource().removeFeature(stopFeature);
-        this.passedStops = this.passedStops + 1;
-        var self=this;
-        setTimeout(function() {
-            console.log('unstop');
-            self.animating = true;
-        }, STOPPED_TIME);
-    }
-    
     draw (vectorContext, frameState) {
         if (this.animating) {
             this.move(frameState);
         }
-        console.log('draw'+this.animating);
         vectorContext.drawFeature(this, styles.geoMarker);
     }
     
     move (frameState) {
          var elapsedTime = frameState.time - this.startTime - (this.passedStops * STOPPED_TIME),
-             relativePosition = ((elapsedTime / 1000) / SECONDS_PER_TRACK),
+             trackLength = this.relation.trackGeometry.getLength(),
+             relativePosition = ((elapsedTime / 1000) / (trackLength / speedInput.value)),
              currentCoordinate = this.relation.trackGeometry.getCoordinateAt(relativePosition),
              closestStopFeature = this.stopLayer.getSource().getClosestFeatureToCoordinate(currentCoordinate),
              closestStopCoordinate = closestStopFeature.getGeometry().getClosestPoint(currentCoordinate),
@@ -56,8 +48,29 @@ class Tram extends ol.Feature {
         this.getGeometry().setCoordinates(currentCoordinate);
         if (distance < STOP_THRESHOLD) {
             this.stop (closestStopFeature)
-        }
-        
+        }    
+    }  
+    
+    stop (stopFeature) {
+        this.animating = false;
+        this.stopLayer.getSource().removeFeature(stopFeature);
+        this.passedStops = this.passedStops + 1;
+        var self = this;
+        setTimeout(function() {
+            self.changeLoad();
+            self.animating = true;
+        }, STOPPED_TIME);
     }
+    
+    changeLoad () {
+        var daytimeIndex = daytimeInput.value - 1,
+            day = dayInput.value,
+            keyString = this.relation.id+','+this.passedStops+','+day;
+        console.log(keyString);
+        this.load = load[keyString][daytimeIndex];
+        //this.changeColor(this.load);
+        console.log('load: ' + this.load);
+    } 
+    
     
 }
