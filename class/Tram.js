@@ -9,9 +9,9 @@ var dayInput = document.getElementById('day');
 class Tram extends ol.Feature {
     constructor (relation, startTime){
         super({
-            geometry : new ol.geom.Point(relation.trackGeometry.getCoordinateAt(0)),
-            style : styles.geoMarker
+            geometry : new ol.geom.Point(relation.trackGeometry.getCoordinateAt(0))
         });
+        this.setStyle(styles.geoMarker);
         console.log("new Tram");
         this.relation = relation;
         this.startTime = startTime;
@@ -34,7 +34,7 @@ class Tram extends ol.Feature {
         if (this.animating) {
             this.move(frameState);
         }
-        vectorContext.drawFeature(this, styles.geoMarker);
+        vectorContext.drawFeature(this, this.getStyle());
     }
     
     move (frameState) {
@@ -68,9 +68,35 @@ class Tram extends ol.Feature {
             keyString = this.relation.id+','+this.passedStops+','+day;
         console.log(keyString);
         this.load = load[keyString][daytimeIndex];
-        //this.changeColor(this.load);
+        this.changeColor(this.load);
         console.log('load: ' + this.load);
     } 
     
+    changeColor (load) {
+        var color = this.color(load),
+            image = new ol.style.Circle({
+                radius : 4,
+                snapToPixel : false,
+                fill : new ol.style.Fill({color: color}),
+                stroke : new ol.style.Stroke({
+                    color: 'black',
+                    width: 1
+                })
+            });
+        this.setStyle(new ol.style.Style({image : image}));
+    }
     
+    color (load) {
+        if (load<10) {
+            return 'blue';
+        } else if (load<30) {
+            return 'green';
+        } else if (load<60) {
+            return 'yellow';
+        } else if (load<80) {
+            return 'orange';
+        } else {
+            return 'red';
+        }
+    }
 }

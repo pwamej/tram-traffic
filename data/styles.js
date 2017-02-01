@@ -3,10 +3,10 @@ var styles = {
         image : new ol.style.Circle({
             radius : 4,
             snapToPixel : false,
-            fill : new ol.style.Fill({color: 'black'}),
+            fill : new ol.style.Fill({color: 'blue'}),
             stroke : new ol.style.Stroke({
-                color: 'white',
-                width: 2
+                color: 'black',
+                width: 1
             })
         }),
         //zIndex=0
