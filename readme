@@ -6,3 +6,5 @@ Maps, potrzebne jest uruchomienie cross-origin resource sharing - w przeglądarc
 https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
 
 Po uruchomieniu należy poczekać kilka sekund na załadowanie wszystkich tras, następnie należy wybrać tempo symulacji, porę dnia oraz rodzaj dnia i nacisnąć Start.
+
+![](https://github.com/pwamej/tram-traffic/blob/master/tram-traffic.gif)
